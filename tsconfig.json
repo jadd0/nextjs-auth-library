@@ -1,0 +1,37 @@
+{
+  "compilerOptions": {
+    "outDir": "dist",
+    "rootDir": "src",
+
+    // Module + resolution
+    "moduleResolution": "bundler",
+    "module": "ES2022",
+
+    // Emit for libraries
+    "declaration": true,
+    "declarationMap": true,
+    "emitDeclarationOnly": false,
+    "composite": false,
+
+    // Target modern JS; let bundlers transpile down if needed
+    "target": "ES2022",
+    "lib": ["ES2022", "DOM"],
+    "jsx": "react-jsx",
+
+    // Source mappings
+    "sourceMap": true,
+    "inlineSources": true
+  },
+  "include": ["src"],
+  "paths": {
+    "@acme/": ["./src/index.ts"],
+    "@acme/*": ["./src/*"],
+    "@types": ["./src/types/index.js"],
+    "@constants": ["./src/constants/index.js"],
+    "@validation": ["./src/validation/index.js"]
+  },
+  "tsc-alias": {
+    "resolveFullPaths": true,
+    "verbose": true
+  }
+}
