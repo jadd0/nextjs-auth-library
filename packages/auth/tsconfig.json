@@ -26,9 +26,9 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["src/*"],
-      "@/types": ["src/types/index.ts"],
-      "@/constants": ["src/constants/index.ts"],
-      "@/validation": ["./shared/validation/index.js"]
+      "@/types": ["src/shared/types/index.js"],
+      "@/constants": ["src/shared/constants/index.js"],
+      "@/validation": ["src/shared/validation/index.js"]
     }
   },
   "include": ["src"],

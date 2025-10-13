@@ -1,1 +1,1 @@
-import type { AuthConfig } from "../../../shared/validation/index"
+import type { AuthConfig } from "@/validation";
