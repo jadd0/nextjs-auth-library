@@ -1,0 +1,1 @@
+import type { AuthConfig } from "../../../shared/validation/index"
