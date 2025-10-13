@@ -1,3 +1,8 @@
+/** A type used for the result of authorisation, either providing user details or null */
+export type AuthorisationResult = {
+  userId: string;
+} | null;
+
 // TODO: type properly
 /** Authorisation type to validate user and return defined data about them */
 export type Authorise = (
@@ -5,4 +10,4 @@ export type Authorise = (
   ctx: unknown,
   // User supplied credentials (eg: form data)
   credentials: unknown
-) => Promise<{ userId: string } | null>; // TODO: change in future to allow more user data
+) => Promise<AuthorisationResult>; // TODO: change in future to allow more user data
