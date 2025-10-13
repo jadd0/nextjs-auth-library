@@ -1,0 +1,1 @@
+export const DATABASE_TYPES = ["postgresql", "mysql"] as const;
