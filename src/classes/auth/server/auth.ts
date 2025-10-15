@@ -12,5 +12,8 @@ export class Auth {
   providers: any[];
   callbacks: any;
 
-  constructor() {}
+  constructor() {
+  }
+
+  
 }
