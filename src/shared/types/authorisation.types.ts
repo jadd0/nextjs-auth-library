@@ -1,7 +1,4 @@
-/** A type used for the result of authorisation, either providing user details or null */
-export type AuthorisationResult = {
-  userId: string;
-} | null;
+import { Session } from "@/classes/auth/server/session";
 
 // TODO: type properly
 /** Authorisation type to validate user and return defined data about them */
@@ -10,9 +7,4 @@ export type Authorise = (
   ctx: unknown,
   // User supplied credentials (eg: form data)
   credentials: unknown
-) => Promise<AuthorisationResult>; // TODO: change in future to allow more user data
-
-export type Session = {
-  userId: string;
-  roles?: string[] | undefined;
-}
+) => Promise<Session>;
