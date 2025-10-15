@@ -11,3 +11,8 @@ export type Authorise = (
   // User supplied credentials (eg: form data)
   credentials: unknown
 ) => Promise<AuthorisationResult>; // TODO: change in future to allow more user data
+
+export type Session = {
+  userId: string;
+  roles?: string[] | undefined;
+}
