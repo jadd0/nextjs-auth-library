@@ -14,7 +14,7 @@ const CallbacksSchema = z
 
 // Full config schema
 export const AuthConfigSchema = z.object({
-  session: z
+  options: z
     .object({
       strategy: z.enum(["jwt", "database"]),
     })
