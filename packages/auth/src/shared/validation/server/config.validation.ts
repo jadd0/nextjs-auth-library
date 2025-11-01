@@ -21,7 +21,7 @@ export const AuthConfigSchema = z.object({
     .default({ strategy: "database" }),
   databasePool: z.any().optional(), // TODO: refine this with proper type
   databaseURL: z.any().optional(), // TODO: refine this with proper type
-  providers: z.array(z.any()).default([]),
+  providers: z.array(z.any()).default([]), // TODO: refine this with proper type
   callbacks: CallbacksSchema,
 });
 

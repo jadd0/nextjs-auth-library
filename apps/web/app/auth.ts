@@ -1,0 +1,1 @@
+import { loadAuthConfig } from '@acme/auth'
