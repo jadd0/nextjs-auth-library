@@ -9,6 +9,7 @@ import { User } from "./user";
 export class Session {
   user: User | null;
   authenticationTime: Date | null = new Date();
+  // TODO: add expiry time?
 
   constructor(user?: User | null) {
     this.user = user;
