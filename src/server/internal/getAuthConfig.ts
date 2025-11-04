@@ -1,3 +1,5 @@
+// ! DEPRECATED
+
 import type { AuthConfig } from "@/shared/types";
 import loadAuthConfig from "../config/loadAuthConfig";
 import { Session } from "@/classes/auth/server/session";

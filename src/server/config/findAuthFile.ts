@@ -1,3 +1,5 @@
+// ! DEPRECATED
+
 import constants from "node:constants";
 import path from "node:path";
 import { access } from "node:fs/promises";

@@ -1,3 +1,5 @@
+// ! DEPRECATED
+
 import { AuthConfigSchema } from "@/shared/validation";
 import { findAuthFile } from "./findAuthFile";
 

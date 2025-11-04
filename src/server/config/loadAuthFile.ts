@@ -1,3 +1,5 @@
+// ! DEPRECATED
+
 import { readFile } from "node:fs/promises";
 import { findAuthFile } from "./findAuthFile";
 
