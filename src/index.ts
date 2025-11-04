@@ -3,4 +3,6 @@ import { AuthConfig } from "./shared/types/config.types.js";
 
 /** Used in a user's "auth.ts" or corresponding file to assist them with authentication setup */
 export type { AuthConfig };
-export { default as getAuthConfig } from "./server/internal/getAuthConfig";
+
+/** Main entry point to library */
+export { default as AuthKit } from "./server/public/authkit.js";
