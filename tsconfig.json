@@ -31,7 +31,7 @@
       "@/validation": ["src/shared/validation/index.js"]
     }
   },
-  "include": ["src"],
+  "include": ["src", "../../apps/web/instrumentation.ts"],
   "tsc-alias": {
     "resolveFullPaths": true,
     "verbose": true

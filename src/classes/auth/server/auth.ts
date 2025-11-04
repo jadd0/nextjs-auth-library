@@ -19,7 +19,7 @@ export class Auth {
   }
 
   private retrieveUserByIdentification(identificationType: string, identificationValue: string): User | null {
-    
+    return null
   }
 
   createSession(providerType: (typeof PROVIDERS)[number], user: User) {

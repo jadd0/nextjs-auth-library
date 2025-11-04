@@ -1,16 +1,16 @@
-import type { AuthConfig } from "@/shared/validation";
+import type { AuthConfig } from "@/shared/types";
 import loadAuthConfig from "../config/loadAuthConfig";
 import { Session } from "@/classes/auth/server/session";
 import { Auth } from "@/classes/auth/server/auth";
 import { DatabaseInteractions } from "@/classes/db";
 import { drizzle } from "drizzle-orm/node-postgres";
 
-export let auth: AuthConfig | undefined;
+export let auth: Auth | null = null;
 export let databaseConnection: any = null;
 
-export async function getAuthConfig(): Promise<Auth> {
+export default async function getAuthConfig(): Promise<Auth> {
   if (!auth) {
-    const config = await loadAuthConfig();
+    const config: AuthConfig = await loadAuthConfig();
 
     if (!config) {
       console.error(
@@ -22,13 +22,11 @@ export async function getAuthConfig(): Promise<Auth> {
     /** Connect to user's database */
     if (config.databaseURL) {
       databaseConnection = drizzle(config.databaseURL);
-    }
-
-    else if (config.databasePool) {
+    } else if (config.databasePool) {
       databaseConnection = drizzle(config.databasePool);
     }
 
-    auth = new Auth();
+    auth = new Auth(config.providers, config.callbacks);
   }
 
   return auth;
@@ -36,6 +34,3 @@ export async function getAuthConfig(): Promise<Auth> {
 
 /** Global exported member for database interactions */
 export const databaseInteractions = new DatabaseInteractions();
-
-/** Init auth */
-getAuthConfig();

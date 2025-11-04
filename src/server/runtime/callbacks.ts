@@ -1,15 +1,15 @@
-import { AuthorisationResult } from "@/shared/types";
-import type { AuthConfig } from "@/validation";
+import { Session } from "@/classes/auth/server/session";
+import type { AuthConfig } from "@/shared/types";
 
 /** Function used to run whatever callback is supplied in the auth.ts providers config */
 export async function runCallback(
   config: AuthConfig,
   ctx: unknown,
   credentials: unknown
-): Promise<AuthorisationResult> {
+): Promise<Session | null> {
   // Gets the callback function from the config
   const fn = config.callbacks?.authorise as
-    | ((ctx: unknown, credentials: unknown) => Promise<AuthorisationResult>)
+    | ((ctx: unknown, credentials: unknown) => Promise<Session | null>)
     | undefined;
   // If no function is provided, return null
   if (!fn) return null;

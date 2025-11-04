@@ -1,7 +1,7 @@
 "use server";
 
 import { cookies } from "next/headers";
-import type { Session } from "@/types";
+import { Session } from "@/classes/auth/server/session";
 import { parseCookie, verifyJWT } from "@/utils";
 
 /** Function used to read a JWT from a cookie, verify it and return a user Session or null */
@@ -44,5 +44,5 @@ export async function getSession(
     ? payload.roles.filter((r) => typeof r === "string")
     : undefined;
 
-  return { userId, roles };
+  return null; //TODO: new Session(userId, roles); if no session etc
 }

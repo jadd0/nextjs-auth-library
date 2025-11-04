@@ -24,8 +24,3 @@ export const AuthConfigSchema = z.object({
   providers: z.array(z.any()).default([]), // TODO: refine this with proper type
   callbacks: CallbacksSchema,
 });
-
-// Export the TS type
-
-/** Auth config type used for validation */
-export type AuthConfig = z.infer<typeof AuthConfigSchema>;
