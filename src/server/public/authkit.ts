@@ -1,4 +1,7 @@
+// ! DEPRECATED
+
 import { Auth } from "@/classes/auth/server/auth";
+import { DatabaseInteractions } from "@/classes/db";
 import { AuthConfig } from "@/shared/types";
 import { AuthConfigSchema } from "@/shared/validation";
 import { drizzle } from "drizzle-orm/node-postgres";
@@ -44,3 +47,6 @@ export default function AuthKit(config: AuthConfig) {
   // TODO: remove
   console.log("AuthKit initialised with config:", config);
 }
+
+/** Global exported member for database interactions */
+export const databaseInteractions = new DatabaseInteractions();

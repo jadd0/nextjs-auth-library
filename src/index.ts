@@ -5,4 +5,4 @@ import { AuthConfig } from "./shared/types/config.types.js";
 export type { AuthConfig };
 
 /** Main entry point to library */
-export { default as AuthKit } from "./server/public/authkit.js";
+export { default as AuthKit } from "./core/factory.js";
