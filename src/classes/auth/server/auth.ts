@@ -25,4 +25,8 @@ export class Auth {
   createSession(providerType: (typeof PROVIDERS)[number], user: User) {
     this.session = new Session(user);
   }
+
+  hello() {
+    return new Response("Hello from Auth class handler!");
+  }
 }
