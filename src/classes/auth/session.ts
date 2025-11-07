@@ -1,18 +1,17 @@
 import { User } from "./user";
 
-/**
+/** 
  * @class Session
- * @description Represents a user session in the authentication system for server-side operations.
+ * @description Represents a blueprint for an object encapsulating user sessions in the authentication system.
  * @property {User | null} user - The authenticated user associated with the session, or null if unauthenticated.
  * @property {Date} authenticationTime - The timestamp when the session was created or last authenticated.
- */
+*/
 export class Session {
   user: User | null;
   authenticationTime: Date | null = new Date();
-  // TODO: add expiry time?
 
   constructor(user?: User | null) {
-    this.user = user;
+    this.user = user || null;
   }
 
   /** Used to retrieve the authentication state of a user */
