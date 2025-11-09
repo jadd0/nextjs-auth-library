@@ -6,7 +6,6 @@ import { PROVIDERS } from "@/shared/constants";
  * @class Auth
  * @description This class serves as the main entry point for authentication functionalities. This will be extended by specific implementations for server and client environments.
  *
- * @
  */
 export class Auth {
   sessions: Sessions;
@@ -23,10 +22,6 @@ export class Auth {
     identificationValue: string
   ): User | null {
     return null;
-  }
-
-  createSession(providerType: (typeof PROVIDERS)[number], user: User) {
-    this.session = new Session(user);
   }
 
   hello() {

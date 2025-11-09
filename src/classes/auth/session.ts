@@ -9,6 +9,7 @@ import { User } from "./user";
 export class Session {
   user: User | null;
   authenticationTime: Date | null = new Date();
+  lastRetrievedTime: Date | null = null;
 
   constructor(user?: User | null) {
     this.user = user || null;
@@ -24,6 +25,7 @@ export class Session {
     return this.user;
   }
 
+  // TODO: make private maybe? i dont want this to be publicly accessible
   /** Used to set the user */
   setUser(user: User | null): void {
     this.user = user;
@@ -42,4 +44,7 @@ export class Session {
   getAuthenticationTime(): Date {
     return this.authenticationTime;
   }
+
+  
+
 }

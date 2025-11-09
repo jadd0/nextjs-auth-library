@@ -2,7 +2,7 @@
 
 import type { AuthConfig } from "@/index";
 import { AuthConfigSchema } from "@/shared/validation/server/config.validation";
-import { Auth } from "@/classes/auth/server/auth";
+import { Auth } from "@/classes/auth/auth";
 
 // Module-scoped references
 let instance: Auth | null = null;

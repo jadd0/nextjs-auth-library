@@ -6,3 +6,5 @@ export type { AuthConfig };
 
 /** Main entry point to library */
 export { default as AuthKit } from "./core/factory.js";
+
+/** Export  */

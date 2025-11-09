@@ -1,6 +1,6 @@
 // ! DEPRECATED
 
-import { Auth } from "@/classes/auth/server/auth";
+import { Auth } from "@/classes/auth/auth";
 import { DatabaseInteractions } from "@/classes/db";
 import { AuthConfig } from "@/shared/types";
 import { AuthConfigSchema } from "@/shared/validation";

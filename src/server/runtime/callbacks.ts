@@ -1,4 +1,4 @@
-import { Session } from "@/classes/auth/server/session";
+import { Session } from "@/classes/auth/session";
 import type { AuthConfig } from "@/shared/types";
 
 /** Function used to run whatever callback is supplied in the auth.ts providers config */
