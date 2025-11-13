@@ -41,7 +41,7 @@ export class Session {
   }
 
   /** Used to retrieve the authentication time (when the session was created or last authenticated) */
-  getAuthenticationTime(): Date {
+  getAuthenticationTime(): Date | null { // TODO: chagne null to whatever
     return this.authenticationTime;
   }
 

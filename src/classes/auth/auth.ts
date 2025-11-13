@@ -15,6 +15,7 @@ export class Auth {
   constructor(providers: any[], callbacks: any) {
     this.providers = providers;
     this.callbacks = callbacks;
+    this.sessions = new Sessions();
   }
 
   private retrieveUserByIdentification(

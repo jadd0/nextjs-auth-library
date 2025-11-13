@@ -42,7 +42,7 @@ export async function getSession(
   // Ensure roles is an array of strings if present
   // TODO: ensure I want to use user roles, maybe remove in future
   const roles = Array.isArray(payload?.roles)
-    ? payload.roles.filter((r) => typeof r === "string")
+    ? payload.roles.filter((r: any) => typeof r === "string") // TODO: add better type check
     : undefined;
 
   return null; //TODO: new Session(userId, roles); if no session etc
