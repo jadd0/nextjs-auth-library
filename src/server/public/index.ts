@@ -7,4 +7,5 @@
 
 // Export all public server modules
 
-export * from "./getSession.js";
+export * from "./getSession";
+export * from "./authkit";

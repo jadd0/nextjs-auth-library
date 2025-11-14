@@ -1,8 +1,9 @@
 "use server";
 
-import { cookies } from "next/headers";
-import type { Session } from "@/types";
+import { Session } from "@/classes/auth/session";
 import { parseCookie, verifyJWT } from "@/utils";
+
+// TODO: change this to actually return a session
 
 /** Function used to read a JWT from a cookie, verify it and return a user Session or null */
 export async function getSession(
@@ -32,8 +33,8 @@ export async function getSession(
     typeof payload?.sub === "string"
       ? payload.sub
       : typeof payload?.userId === "string"
-        ? payload.userId
-        : null;
+      ? payload.userId
+      : null;
 
   // If no userId found in payload, return null
   if (!userId) return null;
@@ -41,8 +42,8 @@ export async function getSession(
   // Ensure roles is an array of strings if present
   // TODO: ensure I want to use user roles, maybe remove in future
   const roles = Array.isArray(payload?.roles)
-    ? payload.roles.filter((r) => typeof r === "string")
+    ? payload.roles.filter((r: any) => typeof r === "string") // TODO: add better type check
     : undefined;
 
-  return { userId, roles };
+  return null; //TODO: new Session(userId, roles); if no session etc
 }

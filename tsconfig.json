@@ -1,27 +1,16 @@
 {
   "compilerOptions": {
+    "module": "esnext",
+    "target": "esnext",
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+
+    "declaration": true,
+    "strict": true,
+    "moduleResolution": "node",
+    "skipLibCheck": true,
+    "esModuleInterop": true,
     "outDir": "dist",
     "rootDir": "src",
-
-    // Module + resolution
-    "moduleResolution": "bundler",
-    "module": "ES2022",
-
-    // Emit for libraries
-    "declaration": true,
-    "declarationMap": true,
-    "emitDeclarationOnly": false,
-    "composite": false,
-
-    // Target modern JS; let bundlers transpile down if needed
-    "target": "ES2022",
-    "lib": ["ES2022", "DOM"],
-    "jsx": "react-jsx",
-
-    // Source mappings
-    "sourceMap": true,
-    "inlineSources": true,
-
     // Pathing
     "baseUrl": ".",
     "paths": {
@@ -31,7 +20,7 @@
       "@/validation": ["src/shared/validation/index.js"]
     }
   },
-  "include": ["src"],
+  "include": ["src", "src/core"],
   "tsc-alias": {
     "resolveFullPaths": true,
     "verbose": true
