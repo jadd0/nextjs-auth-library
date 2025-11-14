@@ -12,6 +12,15 @@ const CallbacksSchema = z
   })
   .default({});
 
+/** Schema to validate database as a pool (alternate as URL defined inside AuthConfigSchema) */
+export const DatabasePoolConfigSchema = z.object({
+  user: z.string(),
+  host: z.string(),
+  password: z.string(),
+  database: z.string(),
+  port: z.number(),
+});
+
 /** Full config schema */
 export const AuthConfigSchema = z.object({
   options: z
@@ -19,8 +28,8 @@ export const AuthConfigSchema = z.object({
       strategy: z.enum(["jwt", "database"]),
     })
     .default({ strategy: "database" }),
-  databasePool: z.any().optional(), // TODO: refine this with proper type
-  databaseURL: z.any().optional(), // TODO: refine this with proper type
+  /** Either a database pool, or a database URL */
+  db: z.union([z.string().url(), DatabasePoolConfigSchema]),
   providers: z.array(z.any()).default([]), // TODO: refine this with proper type
   callbacks: CallbacksSchema,
 });

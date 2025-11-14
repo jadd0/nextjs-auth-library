@@ -3,6 +3,7 @@
 import type { AuthConfig } from "@/index";
 import { AuthConfigSchema } from "@/shared/validation/server/config.validation";
 import { Auth } from "@/classes/auth/auth";
+import { DatabasePoolConfig } from "@/shared/types";
 
 // Module-scoped references
 let instance: Auth | null = null;
@@ -24,7 +25,7 @@ async function init(config: AuthConfig): Promise<Auth> {
 
   // Lazy import node-postgres drizzle only in Node runtime paths
   let db: unknown = null;
-  if (c.databaseURL || c.databasePool) {
+  if (c.db) {
     // Avoid importing on Edge; rely on runtime heuristics
     const isNode =
       typeof process !== "undefined" &&
@@ -36,9 +37,7 @@ async function init(config: AuthConfig): Promise<Auth> {
 
     const { drizzle } = await import("drizzle-orm/node-postgres");
 
-    db = c.databaseURL
-      ? drizzle(c.databaseURL as any)
-      : drizzle(c.databasePool as any);
+    db = drizzle(c.db as any);
 
     // Test the connection with a simple query
     try {
@@ -48,11 +47,10 @@ async function init(config: AuthConfig): Promise<Auth> {
       console.error("Database connection failed:", error);
       throw new Error(
         "Failed to connect to the database. Please check your database connection method and credentials. Given method: " +
-          (c.databaseURL ? "databaseURL" : "databasePool")
+          (typeof c.db == "string" ? "database URL" : "database Pool")
       );
     }
   }
-
 
   // Construct core service
   const auth = new Auth(c.providers, c.callbacks);
