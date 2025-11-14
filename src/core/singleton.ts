@@ -29,14 +29,30 @@ async function init(config: AuthConfig): Promise<Auth> {
     const isNode =
       typeof process !== "undefined" &&
       typeof process.versions?.node === "string";
+
     if (!isNode) {
       throw new Error("Database adapter requires Node.js runtime");
     }
+
     const { drizzle } = await import("drizzle-orm/node-postgres");
+
     db = c.databaseURL
       ? drizzle(c.databaseURL as any)
       : drizzle(c.databasePool as any);
+
+    // Test the connection with a simple query
+    try {
+      await (db as any).execute("SELECT 1");
+      console.log("Database connection successful");
+    } catch (error) {
+      console.error("Database connection failed:", error);
+      throw new Error(
+        "Failed to connect to the database. Please check your database connection method and credentials. Given method: " +
+          (c.databaseURL ? "databaseURL" : "databasePool")
+      );
+    }
   }
+
 
   // Construct core service
   const auth = new Auth(c.providers, c.callbacks);
