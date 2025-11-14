@@ -7,7 +7,6 @@ import {
   timestamp,
   varchar,
 } from "drizzle-orm/pg-core";
-import { id } from "zod/locales";
 import { users } from "./users.schemas";
 import { PROVIDERS } from "@/shared/constants";
 
@@ -53,11 +52,23 @@ export const accounts = pgTable(
     /** The type of the token */
     tokenType: varchar("tokenType"),
 
+    /** The encrypted user password */
+    password: varchar("password"),
+
+    /** The hash type used for the password */
+    passwordHash: varchar("passwordHash"),
+
     /** A timestamp explaining when the account connection was created */
     createdAt: timestamp("createdAt").defaultNow().notNull(),
+
+    /** A timestamp explaining when the account connection was last updated */
+    updatedAt: timestamp("updatedAt").defaultNow().notNull(), // TODO: add trigger to update on row update
   },
   (table) => ({
     /** Composite primary key consisting of user ID (foreign key to users table) and the provider used to  */
     pk: primaryKey({ columns: [table.userId, table.provider] }),
   })
 );
+
+export type Account = typeof accounts.$inferSelect;
+export type NewAccount = typeof accounts.$inferInsert;
