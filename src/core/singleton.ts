@@ -9,6 +9,8 @@ import { DatabasePoolConfig } from "@/shared/types";
 let instance: Auth | null = null;
 let initPromise: Promise<Auth> | null = null;
 
+export let db: any;
+
 /** Normalise and validate configuration, connect DB (Node runtime only), and create the Auth instance */
 async function init(config: AuthConfig): Promise<Auth> {
   // Validate config using Zod schema
@@ -24,7 +26,7 @@ async function init(config: AuthConfig): Promise<Auth> {
   const c = parsed.data;
 
   // Lazy import node-postgres drizzle only in Node runtime paths
-  let db: unknown = null;
+
   if (c.db) {
     // Avoid importing on Edge; rely on runtime heuristics
     const isNode =

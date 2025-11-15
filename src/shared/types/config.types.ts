@@ -1,5 +1,9 @@
 import z from "zod";
 import { AuthConfigSchema, DatabasePoolConfigSchema } from "../validation";
+import { PROVIDERS } from "../constants";
+
+/** Providers enum type used for config */
+export type Providers = typeof PROVIDERS[number]
 
 /** Auth config type used for validation */
 export type AuthConfig = z.infer<typeof AuthConfigSchema>;
