@@ -3,7 +3,9 @@
 import type { AuthConfig } from "@/index";
 import { AuthConfigSchema } from "@/shared/validation/server/config.validation";
 import { Auth } from "@/classes/auth/auth";
+import { pushSchema } from "drizzle-kit/api";
 import { DatabasePoolConfig } from "@/shared/types";
+import { accounts, sessions, users } from "@/db/schemas";
 
 // Module-scoped references
 let instance: Auth | null = null;
@@ -54,7 +56,11 @@ async function init(config: AuthConfig): Promise<Auth> {
     }
   }
 
-  // Construct core service
+  // Create tables in db if not already present
+  const { apply } = await pushSchema({ users, accounts, sessions }, db);
+  await apply();
+
+  // Create the Auth instance
   const auth = new Auth(c.providers, c.callbacks);
 
   return auth;
