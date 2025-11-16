@@ -8,4 +8,3 @@
 // Export all public server modules
 
 export * from "./getSession";
-export * from "./authkit";

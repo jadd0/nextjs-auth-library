@@ -26,7 +26,7 @@ export const accounts = pgTable(
     type: varchar("type").notNull(),
 
     /** The type of provider liked with the account */
-    provider: providerEnum("provider").notNull(),
+    provider: varchar("provider").notNull(),
 
     /** The id related to the provider used to make the account;
      *  Used for third party connections */

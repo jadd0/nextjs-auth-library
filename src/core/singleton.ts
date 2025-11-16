@@ -3,8 +3,6 @@
 import type { AuthConfig } from "@/index";
 import { AuthConfigSchema } from "@/shared/validation/server/config.validation";
 import { Auth } from "@/classes/auth/auth";
-import { pushSchema } from "drizzle-kit/api";
-import { DatabasePoolConfig } from "@/shared/types";
 import { accounts, sessions, users } from "@/db/schemas";
 
 // Module-scoped references
@@ -12,6 +10,22 @@ let instance: Auth | null = null;
 let initPromise: Promise<Auth> | null = null;
 
 export let db: any;
+ 
+// TODO: implement
+/** Function to ensure provided database matches the necessary schema */
+async function checkTables() {
+  const requiredTables = ["users", "accounts", "sessions"];
+  for (const table of requiredTables) {
+    const result = await db.query(`
+      SELECT to_regclass('${table}') as exists;
+    `); // postgres-specific
+    if (!result.rows[0].exists) {
+      throw new Error(
+        `Required table "${table}" not found! Please run the provided schema.sql migration.`
+      );
+    }
+  }
+}
 
 /** Normalise and validate configuration, connect DB (Node runtime only), and create the Auth instance */
 async function init(config: AuthConfig): Promise<Auth> {
@@ -55,10 +69,6 @@ async function init(config: AuthConfig): Promise<Auth> {
       );
     }
   }
-
-  // Create tables in db if not already present
-  const { apply } = await pushSchema({ users, accounts, sessions }, db);
-  await apply();
 
   // Create the Auth instance
   const auth = new Auth(c.providers, c.callbacks);

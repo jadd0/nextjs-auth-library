@@ -1,5 +1,5 @@
 import type { AuthConfig } from "@/index";
-import { getAuthInstance } from "./singleton";
+import { db, getAuthInstance } from "./singleton";
 
 // Web API Request/Response are standard in Next route handlers
 type WebHandler = (req: Request) => Promise<Response> | Response;
@@ -49,5 +49,6 @@ export default function AuthKit(config: AuthConfig) {
     auth,
     signIn,
     signOut,
+    db
   };
 }
