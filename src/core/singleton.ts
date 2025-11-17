@@ -59,7 +59,7 @@ async function init(config: AuthConfig): Promise<Auth> {
   // Validate the DB against the schema
   try {
     await dbSchemaValidation();
-    console.log("Database Schema validation ");
+    console.log("Database Schema validation successful");
   } catch (error: any) {
     console.error("Schema validation error:", error.message);
   }

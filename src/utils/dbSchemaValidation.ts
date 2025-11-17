@@ -7,6 +7,7 @@ import {
   sessions,
   NewSession,
 } from "@/db/schemas";
+import { eq } from "drizzle-orm";
 
 /** Helper function to test transaction insertion. Runs a function in a transaction and always rolls back, so no data is persisted */
 async function testInTransaction(fn: () => Promise<void>) {
@@ -55,10 +56,17 @@ export async function dbSchemaValidation(): Promise<boolean> {
       // Force rollback
       throw new Error("Rollback transaction after schema test.");
     });
+
+    /** Fallback deletions of test data incase transaction rollback does not work */
+    await db.delete(accounts).where(eq(accounts.userId, "fake-user-id"));
+    await db.delete(sessions).where(eq(sessions.id, "fake-session-id"));
+    await db.delete(users).where(eq(users.id, "fake-user-id"));
+
     return true;
   } catch (e: any) {
     throw new Error(
-      "Database schema validation failed. Ensure all migrations are complete. Check the README.md for migration instructions."
+      "Database schema validation failed. Ensure all migrations are complete. Check the README.md for migration instructions.\n\nDetails: " +
+        e
     );
   }
 }
