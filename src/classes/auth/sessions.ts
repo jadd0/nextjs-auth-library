@@ -1,6 +1,7 @@
 import { DatabaseSessionInteractions } from "@/db/interfaces/databaseSessionInteractions";
 import { Session } from "./session";
-import { NewSession } from "@/db/schemas";
+import { Session as DatabaseSession } from "@/db/schemas";
+import { DatabaseUserInteractions } from "@/db/interfaces/databaseUserInteractions";
 
 /**
  * @class Sessions
@@ -8,16 +9,13 @@ import { NewSession } from "@/db/schemas";
  * @property {Map<string, Session>} sessions - A map storing active sessions with their IDs.
  */
 export class Sessions {
+  // START: CREATE
+
   /** Main property containing the user sessions */
   sessions: Map<string, Session>; // string "id" is directly equivalent to the database ID for a user's Session
 
   constructor() {
     this.sessions = new Map<string, Session>();
-  }
-
-  /** Private method to generate a random ID string */
-  private generateSessionId(): string {
-    return Math.random().toString(36).substring(2);
   }
 
   /** Create a new session and store it */
@@ -45,13 +43,49 @@ export class Sessions {
     return session;
   }
 
+  // END: CREATRE
+
+  // START: READ
+
   /** Retrieve a session by its ID */
   getSession(sessionId: string): Session | null {
     return this.sessions.get(sessionId) || null;
   }
 
+  // END: READ
+
+  // START: UPDATE
+
+  /** Method used to append database User Sessions to a server-friendly map */
+  async appendDatabaseSessions(databaseSessions: DatabaseSession[]) {
+    // Progmatically append each User to a Session object
+    databaseSessions.forEach(async (session) => {
+      // Retrieve the user assosciated with the session userId
+      const user = await DatabaseUserInteractions.getUserById(session.userId);
+
+      if (!user) {
+        throw new Error(
+          "There has been an error whilst attempting to retrieve user with ID " +
+            session.userId +
+            " for the session with ID " +
+            session.id +
+            " when attempting to append database Session to server Session map."
+        );
+      }
+
+      // Append the session to the map
+      this.sessions.set(session.id, new Session(user));
+    });
+  }
+
+  // END: UPDATE
+
+  // START: DELETE
+
   /** Delete a session by its ID */
   deleteSession(sessionId: string): void {
     this.sessions.delete(sessionId);
   }
+
+  // END: DELETE
 }

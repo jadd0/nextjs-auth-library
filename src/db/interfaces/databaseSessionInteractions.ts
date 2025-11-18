@@ -35,6 +35,11 @@ export const DatabaseSessionInteractions = {
       .findFirst();
   },
 
+  /** Used to retrieve all active sessions */
+  async getAllSessions() {
+    return await db.select().from(sessions);
+  },
+
   // END: READ
 
   // START: UPDATE
@@ -128,6 +133,6 @@ export const DatabaseSessionInteractions = {
       .run();
 
     return result.changes;
-  }
+  },
   // END: DELETE
-}
+};

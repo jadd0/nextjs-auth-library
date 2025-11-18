@@ -1,5 +1,5 @@
 import { generateSessionToken } from "@/utils/session/generateSessionToken";
-import { User } from "./user";
+import { User } from "@/db/schemas";
 
 /**
  * @class Session

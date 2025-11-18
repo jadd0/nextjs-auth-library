@@ -2,6 +2,7 @@ import { DatabaseUserInteractions } from "@/db/interfaces/databaseUserInteractio
 import { Sessions } from "./sessions";
 import { User } from "./user";
 import { PROVIDERS } from "@/shared/constants";
+import { DatabaseSessionInteractions } from "@/db/interfaces/databaseSessionInteractions";
 /**
  * Main parent Auth class
  * @class Auth
@@ -27,6 +28,32 @@ export class Auth {
     this.callbacks = callbacks;
     this.sessions = new Sessions();
     (this.idleTTL = idleTTL), (this.absoluteTTL = absoluteTTL);
+
+    this.retrieveDatabaseSessions();
+  }
+
+  /** Used on runtime initialisation to retrieve any sessions inside the database */
+  private async retrieveDatabaseSessions() {
+    // Attempt to delete all expired database Sessions for storage
+    try {
+      await DatabaseSessionInteractions.deleteExpiredSessions();
+    } catch (error) {
+      throw new Error(
+        "An error occurred whilst attemtping to delete all expired database authentication Sessions."
+      );
+    }
+
+    // Attempt to retrieve all active database Sessions to append to the Sessions instance
+    let sessions;
+    try {
+      sessions = await DatabaseSessionInteractions.getAllSessions();
+    } catch (error) {
+      throw new Error(
+        "An error occurred whilst attempting to retrieve all active database authentication Sessions."
+      );
+    }
+
+    await this.sessions.appendDatabaseSessions(sessions);
   }
 
   async createSession(userId: string) {
