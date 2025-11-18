@@ -3,8 +3,6 @@
 import type { AuthConfig } from "@/index";
 import { AuthConfigSchema } from "@/shared/validation/server/config.validation";
 import { Auth } from "@/classes/auth/auth";
-import * as schema from "@/db/schemas";
-import { drizzle } from "drizzle-orm/node-postgres";
 import { dbSchemaValidation } from "@/utils/dbSchemaValidation";
 
 // Module-scoped references
@@ -12,6 +10,7 @@ let instance: Auth | null = null;
 let initPromise: Promise<Auth> | null = null;
 
 export let db: any;
+export let authConfig: AuthConfig;
 
 /** Normalise and validate configuration, connect DB (Node runtime only), and create the Auth instance */
 async function init(config: AuthConfig): Promise<Auth> {
@@ -64,8 +63,15 @@ async function init(config: AuthConfig): Promise<Auth> {
     console.error("Schema validation error:", error.message);
   }
 
+  // Export the config library-wide
+  authConfig = config;
+
+  // Default TTL lengths if not specified by developer
+  const idleTTLLength = 1800 // 30 minutes
+  const absoluteTTLLength = 32400 // 9 hours
+
   // Create the Auth instance
-  const auth = new Auth(c.providers, c.callbacks);
+  const auth = new Auth(c.providers, c.callbacks, c.idleTTL || idleTTLLength , c.absoluteTTL || absoluteTTLLength);
 
   return auth;
 }

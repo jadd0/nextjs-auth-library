@@ -1,4 +1,6 @@
+import { DatabaseSessionInteractions } from "@/db/interfaces/databaseSessionInteractions";
 import { Session } from "./session";
+import { NewSession } from "@/db/schemas";
 
 /**
  * @class Sessions
@@ -7,7 +9,7 @@ import { Session } from "./session";
  */
 export class Sessions {
   /** Main property containing the user sessions */
-  sessions: Map<string, Session>;
+  sessions: Map<string, Session>; // string "id" is directly equivalent to the database ID for a user's Session
 
   constructor() {
     this.sessions = new Map<string, Session>();
@@ -19,9 +21,27 @@ export class Sessions {
   }
 
   /** Create a new session and store it */
-  createSession(user: any): Session {
+  async createSession(user: any): Promise<Session> {
+    // Create Session object
     const session = new Session(user);
-    this.sessions.set(this.generateSessionId(), session);
+
+    // Insert new session into Sessions database table
+    const result = await DatabaseSessionInteractions.createSession({
+      sessionToken: session.sessionToken,
+      userId: user.id,
+      expires: new Date(), // TODO: implement properly
+    });
+
+    if (!result) {
+      throw new Error(
+        "An error occured whilst attempting to create a database authentication session for the user with ID: " +
+          user.id
+      );
+    }
+
+    // Append the new Session to the Sessions map
+    this.sessions.set(result.id, session);
+
     return session;
   }
 
