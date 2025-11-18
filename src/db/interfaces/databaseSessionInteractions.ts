@@ -2,8 +2,8 @@ import { db } from "@/core/singleton";
 import { NewSession, Session, sessions } from "@/db/schemas";
 import { eq, lt, sql } from "drizzle-orm";
 
-/** An abstract class to represent all user authentication sessions interactions in the database */
-export class DatabaseSessionInteractions {
+/** A repository object to represent all user authentication sessions interactions in the database */
+export const DatabaseSessionInteractions = {
   // START: CREATE
 
   /** Used to create a user session for authentication */
@@ -11,7 +11,7 @@ export class DatabaseSessionInteractions {
     const result = await db.insert(sessions).values(config).returning();
 
     return result[0];
-  }
+  },
 
   // END: CREATE
 
@@ -24,7 +24,7 @@ export class DatabaseSessionInteractions {
       .from(sessions)
       .where(eq(sessions.id, id))
       .findFirst();
-  }
+  },
 
   /** Used to retrieve the session related to a specific user via their user ID */
   async getSessionsByUserId(userId: string): Promise<Session | null> {
@@ -33,7 +33,7 @@ export class DatabaseSessionInteractions {
       .from(sessions)
       .where(eq(sessions.userId, userId))
       .findFirst();
-  }
+  },
 
   // END: READ
 
@@ -52,7 +52,7 @@ export class DatabaseSessionInteractions {
       .returning();
 
     return result[0] || null;
-  }
+  },
 
   /** Used to update a session's token by session ID */
   async updateSessionTokenById(
@@ -66,7 +66,7 @@ export class DatabaseSessionInteractions {
       .returning();
 
     return result[0] || null;
-  }
+  },
 
   /** Used to update a session's expiry by session ID */
   async updateSessionExpiryById(
@@ -80,7 +80,7 @@ export class DatabaseSessionInteractions {
       .returning();
 
     return result[0] || null;
-  }
+  },
 
   /** Used to update a session's expiry by user ID */
   async updateSessionExpiryByUserId(
@@ -94,7 +94,7 @@ export class DatabaseSessionInteractions {
       .returning();
 
     return result[0] || null;
-  }
+  },
 
   // END: UPDATE
 
@@ -108,7 +108,7 @@ export class DatabaseSessionInteractions {
       .returning();
 
     return result[0] || null;
-  }
+  },
 
   /** Used to delete a user's authentication session by session ID */
   async deleteSessionBySessionId(id: string): Promise<Session | null> {
@@ -118,7 +118,7 @@ export class DatabaseSessionInteractions {
       .returning();
 
     return result[0] || null;
-  }
+  },
 
   /** Used to delete expired sessions from the database, returns number of deleted rows */
   async deleteExpiredSessions(): Promise<number> {

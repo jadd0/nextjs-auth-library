@@ -3,14 +3,14 @@ import { Account, accounts, NewAccount } from "@/db/schemas";
 import { Providers } from "@/shared/types";
 import { and, eq } from "drizzle-orm";
 
-/** An abstract class to represent all account connections interactions in the database */
-export class DatabaseAccountInteractions {
+/** A repository object to represent all account connections interactions in the database */
+export const DatabaseAccountInteractions = {
   // START: CREATE
 
   /** Used to create an account connection (eg: a provider) */
   async createAccount(config: NewAccount): Promise<Account[]> {
     return db.insert(accounts).values(config).returning();
-  }
+  },
 
   // END: CREATE
 
@@ -19,7 +19,7 @@ export class DatabaseAccountInteractions {
   /** Used to retrive user account connections via the user's ID */
   async getAccountsByUserId(id: string): Promise<Account[] | null> {
     return await db.select().from(accounts).where(eq(accounts.userId, id));
-  }
+  },
 
   /** Used to retrieve a unique account connection via composite key (userId + provider) */
   async getAccountByCompositeKey(
@@ -31,7 +31,7 @@ export class DatabaseAccountInteractions {
       .from(accounts)
       .where(and(eq(accounts.userId, userId), eq(accounts.provider, provider)))
       .findFirst();
-  }
+  },
 
   /** Used to retrieve a unique account connection via provider account ID */
   async getAccountByProviderAccountId(
@@ -42,7 +42,7 @@ export class DatabaseAccountInteractions {
       .from(accounts)
       .where(eq(accounts.providerAccountId, accountId))
       .findFirst();
-  }
+  },
 
   // END: READ
 
@@ -60,7 +60,7 @@ export class DatabaseAccountInteractions {
       .returning();
 
     return result[0] || null;
-  }
+  },
 
   /** Used to update a user's password hash (if via email/password provider) via the composite key (userId + provider) */
   async updateAccountPasswordHash(
@@ -74,7 +74,7 @@ export class DatabaseAccountInteractions {
       .returning();
 
     return result[0] || null;
-  }
+  },
 
   // END: UPDATE
 
