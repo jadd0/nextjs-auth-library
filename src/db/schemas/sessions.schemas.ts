@@ -19,7 +19,7 @@ export const sessions = pgTable("sessions", {
   expires: timestamp("expires").notNull(),
 
   /** A timestamp explaining when the session was created */
-  createdAt: timestamp("createdAt").notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
 });
 
 export type Session = typeof sessions.$inferSelect;
