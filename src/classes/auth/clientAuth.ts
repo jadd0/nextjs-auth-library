@@ -1,5 +1,7 @@
-import { Auth } from "./auth";
+import { authConfig } from "@/core/singleton";
 
-export class ClientAuth extends Auth {
-  
+export class ClientAuth {
+  constructor() {}
+
+
 }

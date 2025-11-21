@@ -1,4 +1,3 @@
-import { generateSessionToken } from "@/utils/session/generateSessionToken";
 import { User } from "@/db/schemas";
 import { DatabaseSessionInteractions } from "@/db/interfaces/databaseSessionInteractions";
 import { authConfig } from "@/core/singleton";

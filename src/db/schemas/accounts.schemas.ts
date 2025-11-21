@@ -23,7 +23,7 @@ export const accounts = pgTable(
       .references(() => users.id),
 
     /** The type of authentication relating to the account, ie: oidc, oauth */
-    type: varchar("type").notNull(),
+    type: varchar("type"),
 
     /** The type of provider liked with the account */
     provider: varchar("provider").notNull(),
