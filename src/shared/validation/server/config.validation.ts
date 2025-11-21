@@ -23,13 +23,21 @@ export const DatabasePoolConfigSchema = z.object({
 
 /** Full config schema */
 export const AuthConfigSchema = z.object({
-  options: z
-    .object({
-      strategy: z.enum(["jwt", "database"]),
-    })
-    .default({ strategy: "database" }),
+  options: [
+    z
+      .object({
+        strategy: z.enum(["jwt", "database"]),
+      })
+      .default({ strategy: "database" }),
+  ],
+
   /** Either a database pool, or a database URL */
   db: z.union([z.string().url(), DatabasePoolConfigSchema]),
+
   providers: z.array(z.any()).default([]), // TODO: refine this with proper type
   callbacks: CallbacksSchema,
+
+  // This gives the developer the option to how long they wish the sessions for datbabase persistant storage session to last for
+  idleTTL: z.number().nullable(),
+  absoluteTTL: z.number().nullable(), // TODO: make so if have one must have other 
 });
