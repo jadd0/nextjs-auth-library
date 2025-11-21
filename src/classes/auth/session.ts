@@ -1,5 +1,17 @@
 import { generateSessionToken } from "@/utils/session/generateSessionToken";
 import { User } from "@/db/schemas";
+import { DatabaseSessionInteractions } from "@/db/interfaces/databaseSessionInteractions";
+import { authConfig } from "@/core/singleton";
+
+/** Session class constructor interface */
+interface SessionConstructor {
+  id: string; // Session ID correlates 1:1 with DB Session ID
+  user: User;
+  createdAt: Date;
+  sessionToken: string;
+  lastRetrivedTime?: Date;
+  lastActivityTime?: Date;
+}
 
 /**
  * @class Session
@@ -10,16 +22,22 @@ import { User } from "@/db/schemas";
 export class Session {
   // START: CREATE
 
-  user: User | null;
+  id: string;
+  user: User;
   sessionToken: string;
-  expires: Date;
   authenticationTime: Date = new Date();
-  lastRetrievedTime: Date | null = null;
+  lastRetrievedTime: Date;
+  lastActivityTime: Date;
+  createdAt: Date;
 
-  constructor(user: User) {
-    this.user = user || null;
-    this.sessionToken = generateSessionToken();
-    this.expires = expires;
+  // Optional values given for server cold start appension of Sessions to the server map
+  constructor(config: SessionConstructor) {
+    this.id = config.id;
+    this.user = config.user || null;
+    this.sessionToken = config.sessionToken;
+    this.createdAt = config.createdAt;
+    this.lastRetrievedTime = config.lastRetrivedTime || new Date();
+    this.lastActivityTime = config.lastActivityTime || new Date();
   }
 
   // END: CREATE
@@ -38,15 +56,45 @@ export class Session {
     return this.user;
   }
 
-  /** Used to retrieve the expiry time */
-  getExpires(): Date {
-    return this.expires;
-  }
-
   /** Used to retrieve the authentication time (when the session was created or last authenticated) */
-  getAuthenticationTime(): Date  {
+  getAuthenticationTime(): Date {
     // TODO: chagne null to whatever
     return this.authenticationTime;
+  }
+
+  /** Used to retrieve the last instance of authentication for the current session */
+  getLastRetrievedTime(): Date {
+    return this.lastRetrievedTime;
+  }
+
+  /** Used to retrieve the last instance of activity for the current user */
+  getLastActivityTime(): Date {
+    return this.lastActivityTime;
+  }
+
+  /** Used to retrieve the date time that the session was created*/
+  getCreatedAt(): Date {
+    return this.createdAt;
+  }
+
+  getSessionIdleExpiry(): Date | null {
+    const idleTTL = authConfig.idleTTL;
+
+    // If the developer has not set an idleTTL then return null as there is no expiry
+    if (!idleTTL) return null;
+
+    // Returning the idle expiry date as the created at time in ms + idleTTL, from config, in ms - producing the expiry
+    return new Date(this.getCreatedAt().getTime() + idleTTL * 1000);
+  }
+
+  getSessionAbsoluteExpiry(): Date | null {
+    const absoluteTTL = authConfig.absoluteTTL;
+
+    // If the developer has not set an absoluteTTL then return null as there is no expiry
+    if (!absoluteTTL) return null;
+
+    // Returning the idle expiry date as the created at time in ms + absoluteTTL, from config, in ms - producing the expiry
+    return new Date(this.getCreatedAt().getTime() + absoluteTTL * 1000);
   }
 
   // END: READ
@@ -54,10 +102,34 @@ export class Session {
   // START: UPDATE
 
   /** Used to rotate session */
-
   rotateSession(): Session {
+    // TODO: implement
+    return this;
+  }
 
+  /** Used to update the last time the user interacted with the system */
+  async updateLastActivityTime(): Promise<Session> {
+    // Creates a timestamp of now
+    const currentTimestamp = new Date();
 
+    // Update DB Sessions table with new timestamp
+    const dbResult =
+      await DatabaseSessionInteractions.updateLastActivityTimeById(
+        this.id,
+        currentTimestamp
+      );
+
+    // DB error occured
+    if (!dbResult) {
+      throw new Error(
+        `An error has occured whilst attempting to update the last time the User with ID ${this.user.id} interacted with the Session with ID ${this.id}`
+      );
+    }
+
+    // Update this object
+    this.lastActivityTime = currentTimestamp;
+
+    // Return this object
     return this;
   }
 

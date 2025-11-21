@@ -39,5 +39,5 @@ export const AuthConfigSchema = z.object({
 
   // This gives the developer the option to how long they wish the sessions for datbabase persistant storage session to last for
   idleTTL: z.number().nullable(),
-  absoluteTTL: z.number().nullable(),
+  absoluteTTL: z.number().nullable(), // TODO: make so if have one must have other 
 });

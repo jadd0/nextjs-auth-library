@@ -15,10 +15,10 @@ export const sessions = pgTable("sessions", {
     .notNull()
     .references(() => users.id),
 
-  /** A timestamp explaining when the token expires */
-  expires: timestamp("expires").notNull(),
+  /** A timestamp explaining when the last user activity was (used for idle TTL) */
+  lastActivityAt: timestamp("lastActivityAt").defaultNow(),
 
-  /** A timestamp explaining when the session was created */
+  /** A timestamp explaining when the session was created (used for absolute TTL) */
   createdAt: timestamp("createdAt").defaultNow().notNull(),
 });
 

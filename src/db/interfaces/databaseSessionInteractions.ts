@@ -73,28 +73,28 @@ export const DatabaseSessionInteractions = {
     return result[0] || null;
   },
 
-  /** Used to update a session's expiry by session ID */
-  async updateSessionExpiryById(
-    expires: string,
-    id: string
-  ): Promise<Session | null> {
+  /** Used to update and mark down when the user last interacted with the session via Session ID. Used to track idle TTL (sliding). Passes timestamp in so server in sync with DB */
+  async updateLastActivityTimeById(
+    id: string,
+    timestamp: Date
+  ): Promise<Session> {
     const result = await db
       .update(sessions)
-      .set({ expires })
+      .set({ lastActivityAt: timestamp })
       .where(eq(sessions.id, id))
       .returning();
 
     return result[0] || null;
   },
 
-  /** Used to update a session's expiry by user ID */
-  async updateSessionExpiryByUserId(
-    expires: string,
-    userId: string
-  ): Promise<Session | null> {
+  /** Used to update and mark down when the user last interacted with the session via User ID. Used to track idle TTL (sliding). Passes timestamp in so server in sync with DB */
+  async updateLastActivityTimeByUserId(
+    userId: string,
+    timestamp: Date
+  ): Promise<Session> {
     const result = await db
       .update(sessions)
-      .set({ expires })
+      .set({ lastActivityAt: timestamp })
       .where(eq(sessions.userId, userId))
       .returning();
 
@@ -125,14 +125,16 @@ export const DatabaseSessionInteractions = {
     return result[0] || null;
   },
 
+  // TODO: implement properly
   /** Used to delete expired sessions from the database, returns number of deleted rows */
   async deleteExpiredSessions(): Promise<number> {
-    const result = await db
-      .delete(sessions)
-      .where(lt(sessions.expires, sql`now()`))
-      .run();
+    // const result = await db
+    //   .delete(sessions)
+    //   .where(lt(sessions.expires, sql`now()`))
+    //   .run();
 
-    return result.changes;
+    // return result.changes;
+    return 0;
   },
   // END: DELETE
 };

@@ -2,6 +2,7 @@ import { DatabaseSessionInteractions } from "@/db/interfaces/databaseSessionInte
 import { Session } from "./session";
 import { Session as DatabaseSession } from "@/db/schemas";
 import { DatabaseUserInteractions } from "@/db/interfaces/databaseUserInteractions";
+import { generateSessionToken } from "@/utils/session/generateSessionToken";
 
 /**
  * @class Sessions
@@ -20,22 +21,30 @@ export class Sessions {
 
   /** Create a new session and store it */
   async createSession(user: any): Promise<Session> {
-    // Create Session object
-    const session = new Session(user);
+    // Generate a unique Session token
+    const sessionToken = generateSessionToken();
 
     // Insert new session into Sessions database table
     const result = await DatabaseSessionInteractions.createSession({
-      sessionToken: session.sessionToken,
+      sessionToken: sessionToken,
       userId: user.id,
-      expires: new Date(), // TODO: implement properly
     });
 
+    // DB error occurred
     if (!result) {
       throw new Error(
         "An error occured whilst attempting to create a database authentication session for the user with ID: " +
           user.id
       );
     }
+
+    // Create server Session object
+    const session = new Session({
+      id: result.id,
+      user,
+      createdAt: result.createdAt,
+      sessionToken,
+    });
 
     // Append the new Session to the Sessions map
     this.sessions.set(result.id, session);
@@ -74,7 +83,15 @@ export class Sessions {
       }
 
       // Append the session to the map
-      this.sessions.set(session.id, new Session(user));
+      this.sessions.set(
+        session.id,
+        new Session({
+          id: session.id,
+          user,
+          createdAt: session.createdAt,
+          sessionToken: session.sessionToken,
+        })
+      );
     });
   }
 
