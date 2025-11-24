@@ -1,33 +1,47 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import { serverAuth } from "@/core/singleton";
 
-/** Path handler for interal routing of requests. This alleviates the developer of having to handle auth routes with unnecessary boilerplate */
-export default async function handler(req: NextRequest, res: NextResponse) {
-  const url = new URL(req.url);
+/**
+ * Core auth router used by all HTTP entrypoints.
+ * Works with standard Web Request/Response.
+ */
+export async function routeAuthRequest(
+  req: Request
+): Promise<Response> {
+  const url = new URL(req.url); 
   const method = req.method;
 
   const body = await req.json().catch(() => ({}));
-  const path = url.pathname;
+  const path = url.pathname; // e.g. /api/auth/provider/emailPassword/login
 
-  // This splits the path into segments and removes api and auth, because those are handled already
-  const splitPath = path.split("/").filter((segment) => segment.length > 1);
+  // Split, remove empty, `api`, and `auth`
+  const segments = path
+    .split("/")
+    .filter((s) => s.length > 0 && s !== "api" && s !== "auth");
 
   // Handle different routes based on the path
 
+  // segments[0] -> "provider"
+  // segments[1] -> "emailPassword"
+  // segments[2] -> "login"
+
   // Provider handler
-  switch (splitPath[0]) {
+  switch (segments[0]) {
     case "provider":
-      switch (splitPath[1]) {
+      switch (segments[1]) {
         case "emailPassword":
           // Handle email-password provider routes
-          switch (splitPath[2]) {
+          switch (segments[2]) {
             // Handle login route
             case "login":
               if (method === "POST") {
                 // Call the server auth email-password login method
                 const { user, session, cookie } =
-                  await serverAuth.providers.emailPassword.login(body.email, body.password);
-                
+                  await serverAuth.providers.emailPassword.login(
+                    body.email,
+                    body.password
+                  );
+
                 // Return response with session cookie set
                 const res = NextResponse.json(
                   { message: "Login successful", user, session },
