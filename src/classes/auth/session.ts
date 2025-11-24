@@ -76,6 +76,7 @@ export class Session {
     return this.createdAt;
   }
 
+  /** Used to retrieve the idle expiry date for the session */
   getSessionIdleExpiry(): Date | null {
     const idleTTL = authConfig.idleTTL;
 
@@ -86,6 +87,7 @@ export class Session {
     return new Date(this.getCreatedAt().getTime() + idleTTL * 1000);
   }
 
+  /** Used to retrieve the absolute expiry date for the session */
   getSessionAbsoluteExpiry(): Date | null {
     const absoluteTTL = authConfig.absoluteTTL;
 
@@ -94,6 +96,11 @@ export class Session {
 
     // Returning the idle expiry date as the created at time in ms + absoluteTTL, from config, in ms - producing the expiry
     return new Date(this.getCreatedAt().getTime() + absoluteTTL * 1000);
+  }
+
+  /** Used to retrieve the session token */
+  getSessionToken(): string {
+    return this.sessionToken;
   }
 
   // END: READ
