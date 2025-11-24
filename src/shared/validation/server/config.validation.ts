@@ -37,7 +37,9 @@ export const AuthConfigSchema = z.object({
   providers: z.array(z.any()).default([]), // TODO: refine this with proper type
   callbacks: CallbacksSchema,
 
+  sameSite: z.enum(["lax", "strict", "none"]).default("strict").nullable(),
+
   // This gives the developer the option to how long they wish the sessions for datbabase persistant storage session to last for
   idleTTL: z.number().nullable(),
-  absoluteTTL: z.number().nullable(), // TODO: make so if have one must have other 
+  absoluteTTL: z.number().nullable(), // TODO: make so if have one must have other,
 });

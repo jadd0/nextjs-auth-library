@@ -4,6 +4,7 @@ import type { AuthConfig } from "@/index";
 import { AuthConfigSchema } from "@/shared/validation/server/config.validation";
 import { Auth } from "@/classes/auth/auth";
 import { dbSchemaValidation } from "@/utils/dbSchemaValidation";
+import { emailPasswordProviderExport } from "@/classes/providers";
 
 // Module-scoped references
 let instance: Auth | null = null;
@@ -11,6 +12,9 @@ let initPromise: Promise<Auth> | null = null;
 
 export let db: any;
 export let authConfig: AuthConfig;
+
+// Re-export providers for definite instantiation
+export const emailPasswordProvider = emailPasswordProviderExport;
 
 /** Normalise and validate configuration, connect DB (Node runtime only), and create the Auth instance */
 async function init(config: AuthConfig): Promise<Auth> {
