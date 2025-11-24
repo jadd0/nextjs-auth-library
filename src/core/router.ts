@@ -5,10 +5,8 @@ import { serverAuth } from "@/core/singleton";
  * Core auth router used by all HTTP entrypoints.
  * Works with standard Web Request/Response.
  */
-export async function routeAuthRequest(
-  req: Request
-): Promise<Response> {
-  const url = new URL(req.url); 
+export async function routeAuthRequest(req: Request): Promise<Response> {
+  const url = new URL(req.url);
   const method = req.method;
 
   const body = await req.json().catch(() => ({}));
@@ -18,6 +16,8 @@ export async function routeAuthRequest(
   const segments = path
     .split("/")
     .filter((s) => s.length > 0 && s !== "api" && s !== "auth");
+
+  console.log("HELLO FROM ROUTE HANDLER", segments);
 
   // Handle different routes based on the path
 
@@ -30,6 +30,11 @@ export async function routeAuthRequest(
     case "provider":
       switch (segments[1]) {
         case "emailPassword":
+          // Ensure the email-password provider is configured
+          if (!serverAuth.providers.emailPassword) {
+            throw new Error("Email/password provider not configured");
+          }
+          
           // Handle email-password provider routes
           switch (segments[2]) {
             // Handle login route

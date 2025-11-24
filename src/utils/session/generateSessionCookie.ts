@@ -9,13 +9,7 @@ export function generateSessionCookie(
   maxAgeSeconds: number,
   secure = true
 ) {
-  return {
-    name,
-    value,
-    httpOnly: true, // Not accessible via JS
-    secure, // Only send over HTTPS
-    sameSite: authConfig.sameSite, // CSRF protection
-    path: "/", // Send to all app routes
-    maxAge: maxAgeSeconds, // TTL in seconds
-  };
+  return `${name}=${value}; HttpOnly; Path=/; Max-Age=${maxAgeSeconds}; SameSite=${
+    authConfig.sameSite || "Strict"
+  }; ${secure ? "Secure;" : ""}`;
 }

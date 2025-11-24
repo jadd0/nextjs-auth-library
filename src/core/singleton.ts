@@ -11,7 +11,7 @@ import { ServerAuth } from "@/classes/auth/server/serverAuth";
 let instance: Auth | null = null;
 let initPromise: Promise<Auth> | null = null;
 
-export let db: any;
+export let db: any;;
 export let authConfig: AuthConfig;
 export let auth: Auth;
 export let serverAuth: ServerAuth;

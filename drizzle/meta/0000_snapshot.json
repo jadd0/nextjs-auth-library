@@ -1,5 +1,5 @@
 {
-  "id": "65da419b-2b68-4119-805d-4777d7c1981e",
+  "id": "68eec88c-86df-473e-bc60-04835bad410a",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -18,7 +18,7 @@
           "name": "type",
           "type": "varchar",
           "primaryKey": false,
-          "notNull": true
+          "notNull": false
         },
         "provider": {
           "name": "provider",
@@ -147,17 +147,19 @@
           "primaryKey": false,
           "notNull": true
         },
-        "expires": {
-          "name": "expires",
+        "lastActivityAt": {
+          "name": "lastActivityAt",
           "type": "timestamp",
           "primaryKey": false,
-          "notNull": true
+          "notNull": false,
+          "default": "now()"
         },
         "createdAt": {
           "name": "createdAt",
           "type": "timestamp",
           "primaryKey": false,
-          "notNull": true
+          "notNull": true,
+          "default": "now()"
         }
       },
       "indexes": {},

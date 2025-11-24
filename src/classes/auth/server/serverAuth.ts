@@ -3,16 +3,15 @@ import { ServerEmailPassword } from "./serverEmailPassword";
 
 export class ServerAuth {
   providers: {
-    emailPassword?: any;
-    googgle?: any;
+    emailPassword?: ServerEmailPassword;
+    // google?: any;
   } = {};
-  
+
   constructor() {
     for (const provider of authConfig.providers) {
-      if (provider === "emailPassword") {
+      if (provider.id === "emailPassword") {
         this.providers.emailPassword = new ServerEmailPassword();
       }
     }
   }
-
 }

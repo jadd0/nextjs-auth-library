@@ -1,6 +1,6 @@
 CREATE TABLE "accounts" (
 	"userId" varchar NOT NULL,
-	"type" varchar NOT NULL,
+	"type" varchar,
 	"provider" varchar NOT NULL,
 	"providerAccountId" varchar,
 	"refreshToken" varchar,
@@ -20,8 +20,8 @@ CREATE TABLE "sessions" (
 	"id" varchar PRIMARY KEY NOT NULL,
 	"sessionToken" varchar NOT NULL,
 	"userId" varchar NOT NULL,
-	"expires" timestamp NOT NULL,
-	"createdAt" timestamp NOT NULL,
+	"lastActivityAt" timestamp DEFAULT now(),
+	"createdAt" timestamp DEFAULT now() NOT NULL,
 	CONSTRAINT "sessions_sessionToken_unique" UNIQUE("sessionToken")
 );
 --> statement-breakpoint

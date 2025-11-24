@@ -26,22 +26,24 @@ export const DatabaseAccountInteractions = {
     userId: string,
     provider: Providers
   ): Promise<Account | null> {
-    return await db
+    const result = await db
       .select()
       .from(accounts)
-      .where(and(eq(accounts.userId, userId), eq(accounts.provider, provider)))
-      .findFirst();
+      .where(and(eq(accounts.userId, userId), eq(accounts.provider, provider)));
+
+    return result[0] || null;
   },
 
   /** Used to retrieve a unique account connection via provider account ID */
   async getAccountByProviderAccountId(
     accountId: string
   ): Promise<Account | null> {
-    return await db
+    const result = await db
       .select()
       .from(accounts)
-      .where(eq(accounts.providerAccountId, accountId))
-      .findFirst();
+      .where(eq(accounts.providerAccountId, accountId));
+
+    return result[0] || null;
   },
 
   // END: READ
@@ -98,7 +100,7 @@ export const DatabaseAccountInteractions = {
       .where(and(eq(accounts.userId, userId), eq(accounts.provider, provider)))
       .returning();
     return result[0] || null;
-  }
+  },
 
   // END: DELETE
-}
+};

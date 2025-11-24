@@ -21,15 +21,16 @@ export const DatabasePoolConfigSchema = z.object({
   port: z.number(),
 });
 
+/** Options schema for options (duh) */
+const OptionsSchema = z.object({
+  strategy: z.enum(["jwt", "database"]).default("database"),
+  idleTTL: z.number().nullable().optional(),
+  absoluteTTL: z.number().nullable().optional(),
+});
+
 /** Full config schema */
 export const AuthConfigSchema = z.object({
-  options: [
-    z
-      .object({
-        strategy: z.enum(["jwt", "database"]),
-      })
-      .default({ strategy: "database" }),
-  ],
+  options: OptionsSchema.default({ strategy: "database" }),
 
   /** Either a database pool, or a database URL */
   db: z.union([z.string().url(), DatabasePoolConfigSchema]),
