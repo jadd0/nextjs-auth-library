@@ -3,7 +3,7 @@ import { authConfig } from "@/core/singleton";
 /**
  * Generates cookie options for a secure, HttpOnly session cookie
  */
-function generateSessionCookie(
+export function generateSessionCookie(
   name: string,
   value: string,
   maxAgeSeconds: number,
