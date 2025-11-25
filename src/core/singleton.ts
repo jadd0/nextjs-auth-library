@@ -11,7 +11,7 @@ import { ServerAuth } from "@/classes/auth/server/serverAuth";
 let instance: Auth | null = null;
 let initPromise: Promise<Auth> | null = null;
 
-export let db: any;;
+export let db: any;
 export let authConfig: AuthConfig;
 export let auth: Auth;
 export let serverAuth: ServerAuth;
@@ -81,8 +81,8 @@ async function init(config: AuthConfig): Promise<Auth> {
   auth = new Auth(
     c.providers,
     c.callbacks,
-    c.idleTTL || idleTTLLength,
-    c.absoluteTTL || absoluteTTLLength
+    c.options.idleTTL || idleTTLLength,
+    c.options.absoluteTTL || absoluteTTLLength
   );
 
   serverAuth = new ServerAuth();

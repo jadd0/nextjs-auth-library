@@ -78,7 +78,7 @@ export class Session {
 
   /** Used to retrieve the idle expiry date for the session */
   getSessionIdleExpiry(): Date | null {
-    const idleTTL = authConfig.idleTTL;
+    const idleTTL = authConfig.options.idleTTL;
 
     // If the developer has not set an idleTTL then return null as there is no expiry
     if (!idleTTL) return null;
@@ -89,7 +89,7 @@ export class Session {
 
   /** Used to retrieve the absolute expiry date for the session */
   getSessionAbsoluteExpiry(): Date | null {
-    const absoluteTTL = authConfig.absoluteTTL;
+    const absoluteTTL = authConfig.options.absoluteTTL;
 
     // If the developer has not set an absoluteTTL then return null as there is no expiry
     if (!absoluteTTL) return null;

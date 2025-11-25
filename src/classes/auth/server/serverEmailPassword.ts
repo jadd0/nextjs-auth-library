@@ -37,7 +37,7 @@ export class ServerEmailPassword {
     const cookie = generateSessionCookie(
       "session",
       session.getSessionToken(),
-      authConfig.idleTTL || DEFAULT_IDLE_TTL
+      authConfig.options.idleTTL || DEFAULT_IDLE_TTL
     );
 
     return { user, session, cookie };
@@ -75,7 +75,7 @@ export class ServerEmailPassword {
     const cookie = generateSessionCookie(
       "session",
       session.getSessionToken(),
-      authConfig.idleTTL || DEFAULT_IDLE_TTL
+      authConfig.options.idleTTL || DEFAULT_IDLE_TTL
     );
 
     return { user, session, cookie };
