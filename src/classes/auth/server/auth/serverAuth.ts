@@ -1,5 +1,5 @@
 import { authConfig } from "@/core/singleton";
-import { ServerEmailPassword } from "./serverEmailPassword";
+import { ServerEmailPassword } from "./providers/serverEmailPassword";
 
 export class ServerAuth {
   providers: {

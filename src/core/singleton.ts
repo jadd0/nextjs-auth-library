@@ -5,7 +5,7 @@ import { AuthConfigSchema } from "@/shared/validation/server/config.validation";
 import { Auth } from "@/classes/auth/auth";
 import { dbSchemaValidation } from "@/utils/dbSchemaValidation";
 import { emailPasswordProviderExport } from "@/classes/providers";
-import { ServerAuth } from "@/classes/auth/server/serverAuth";
+import { ServerAuth } from "@/classes/auth/server/auth/serverAuth";
 
 // Module-scoped references
 let instance: Auth | null = null;
