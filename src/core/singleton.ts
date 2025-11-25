@@ -6,6 +6,7 @@ import { Auth } from "@/classes/auth/auth";
 import { dbSchemaValidation } from "@/utils/dbSchemaValidation";
 import { emailPasswordProviderExport } from "@/classes/providers";
 import { ServerAuth } from "@/classes/auth/server/auth/serverAuth";
+import { ServerSession } from "@/classes/auth/server/session/serverSession";
 
 // Module-scoped references
 let instance: Auth | null = null;
@@ -14,7 +15,9 @@ let initPromise: Promise<Auth> | null = null;
 export let db: any;
 export let authConfig: AuthConfig;
 export let auth: Auth;
+
 export let serverAuth: ServerAuth;
+export let serverSession: ServerSession;
 
 // Re-export providers for definite instantiation
 export const emailPasswordProvider = emailPasswordProviderExport;
@@ -86,6 +89,7 @@ async function init(config: AuthConfig): Promise<Auth> {
   );
 
   serverAuth = new ServerAuth();
+  serverSession = new ServerSession();
 
   return auth;
 }

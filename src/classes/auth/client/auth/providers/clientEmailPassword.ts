@@ -33,7 +33,7 @@ export class ClientEmailPassword {
 
     // Ensure auth module is initialised
     if (!auth) {
-      throw new Error("Auth module is not initialized");
+      throw new Error("Auth module is not initialised");
     }
 
     // Request to backend to log the user in via the backend auth class (more secure)

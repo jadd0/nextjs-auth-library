@@ -1,16 +1,21 @@
 import { NextResponse } from "next/server";
 import { routeProviderRequest } from "./providers";
+import { routeSessionRequest } from "./session";
 
 /** Used to handle the first segment route */
 export async function routeMainAuthRequest(
   segments: string[],
   method: string,
-  body: any
+  body: any,
+  parsedCookies: Record<string, string>
 ): Promise<Response> {
   // Provider handler
   switch (segments[0]) {
     case "provider":
       return await routeProviderRequest(segments, method, body);
+
+    case "session":
+      return await routeSessionRequest(segments, method, body, parsedCookies);
 
     default:
       return NextResponse.json({ message: "Route not found" }, { status: 404 });
