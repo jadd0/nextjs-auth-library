@@ -4,6 +4,8 @@ import type { AuthConfig } from "@/index";
 import { AuthConfigSchema } from "@/shared/validation/server/config.validation";
 import { Auth } from "@/classes/auth/auth";
 import { dbSchemaValidation } from "@/utils/dbSchemaValidation";
+import { emailPasswordProviderExport } from "@/classes/providers";
+import { ServerAuth } from "@/classes/auth/server/serverAuth";
 
 // Module-scoped references
 let instance: Auth | null = null;
@@ -11,6 +13,11 @@ let initPromise: Promise<Auth> | null = null;
 
 export let db: any;
 export let authConfig: AuthConfig;
+export let auth: Auth;
+export let serverAuth: ServerAuth;
+
+// Re-export providers for definite instantiation
+export const emailPasswordProvider = emailPasswordProviderExport;
 
 /** Normalise and validate configuration, connect DB (Node runtime only), and create the Auth instance */
 async function init(config: AuthConfig): Promise<Auth> {
@@ -67,11 +74,18 @@ async function init(config: AuthConfig): Promise<Auth> {
   authConfig = config;
 
   // Default TTL lengths if not specified by developer
-  const idleTTLLength = 1800 // 30 minutes
-  const absoluteTTLLength = 32400 // 9 hours
+  const idleTTLLength = 1800; // 30 minutes
+  const absoluteTTLLength = 32400; // 9 hours
 
   // Create the Auth instance
-  const auth = new Auth(c.providers, c.callbacks, c.idleTTL || idleTTLLength , c.absoluteTTL || absoluteTTLLength);
+  auth = new Auth(
+    c.providers,
+    c.callbacks,
+    c.options.idleTTL || idleTTLLength,
+    c.options.absoluteTTL || absoluteTTLLength
+  );
+
+  serverAuth = new ServerAuth();
 
   return auth;
 }

@@ -3,4 +3,8 @@
  * @description This module exports various authentication providers.
  */
 
-export { EmailPasswordProvider } from "./emailPassword";
+import { EmailPasswordProvider } from "./emailPassword";
+
+const emailPasswordProvider = new EmailPasswordProvider();
+
+export { emailPasswordProvider as emailPasswordProviderExport };

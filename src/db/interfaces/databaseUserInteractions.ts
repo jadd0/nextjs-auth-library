@@ -5,7 +5,7 @@ import { User } from "@/db/schemas";
 
 /** A repository object to represent all user interactions in the database */
 export const DatabaseUserInteractions = {
-// START: CREATE
+  // START: CREATE
 
   /** Used to create a user */
   async createUser(config: NewUser): Promise<User> {
@@ -18,25 +18,29 @@ export const DatabaseUserInteractions = {
 
   /** Used to retrieve a single user via their id */
   async getUserById(id: string): Promise<User | null> {
-    return await db.select().from("users").where(eq(users.id, id)).findFirst();
+    const result = await db.select().from(users).where(eq(users.id, id));
+
+    return result[0] || null;
   },
 
   /** Used to retrieve a user via their email */
   async getUserByEmail(email: string): Promise<User | null> {
-    return await db
+    const result = await db
       .select()
-      .from("users")
-      .where(eq(users.email, email))
-      .findFirst();
+      .from(users)
+      .where(eq(users.email, email));
+
+    return result[0] || null;
   },
 
   /** Used to retrieve a user via their username */
   getUserByUsername(username: string): Promise<User | null> {
-    return db
+    const result = db
       .select()
-      .from("users")
-      .where(eq(users.username, username))
-      .findFirst();
+      .from(users)
+      .where(eq(users.username, username));
+
+    return result[0] || null;
   },
 
   // END: READ
@@ -121,7 +125,7 @@ export const DatabaseUserInteractions = {
     const result = await db.delete(users).where(eq(users.id, id)).returning();
 
     return result[0] || null;
-  }
+  },
 
   // END: DELETE
-}
+};

@@ -3,3 +3,9 @@ export const DATABASE_TYPES = ["postgresql", "mysql"] as const;
 
 /** List of supported authentication providers */ 
 export const PROVIDERS = ["emailPassword", "google"] as const; 
+
+/** Default idle TTL for sessions in seconds (9 hours) */
+export const DEFAULT_IDLE_TTL = 32400;
+
+/** Default absolute TTL for sessions in seconds (7 days) */
+export const DEFAULT_ABSOLUTE_TTL = 604800;

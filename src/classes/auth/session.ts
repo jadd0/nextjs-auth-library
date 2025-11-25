@@ -1,4 +1,3 @@
-import { generateSessionToken } from "@/utils/session/generateSessionToken";
 import { User } from "@/db/schemas";
 import { DatabaseSessionInteractions } from "@/db/interfaces/databaseSessionInteractions";
 import { authConfig } from "@/core/singleton";
@@ -77,8 +76,9 @@ export class Session {
     return this.createdAt;
   }
 
+  /** Used to retrieve the idle expiry date for the session */
   getSessionIdleExpiry(): Date | null {
-    const idleTTL = authConfig.idleTTL;
+    const idleTTL = authConfig.options.idleTTL;
 
     // If the developer has not set an idleTTL then return null as there is no expiry
     if (!idleTTL) return null;
@@ -87,14 +87,20 @@ export class Session {
     return new Date(this.getCreatedAt().getTime() + idleTTL * 1000);
   }
 
+  /** Used to retrieve the absolute expiry date for the session */
   getSessionAbsoluteExpiry(): Date | null {
-    const absoluteTTL = authConfig.absoluteTTL;
+    const absoluteTTL = authConfig.options.absoluteTTL;
 
     // If the developer has not set an absoluteTTL then return null as there is no expiry
     if (!absoluteTTL) return null;
 
     // Returning the idle expiry date as the created at time in ms + absoluteTTL, from config, in ms - producing the expiry
     return new Date(this.getCreatedAt().getTime() + absoluteTTL * 1000);
+  }
+
+  /** Used to retrieve the session token */
+  getSessionToken(): string {
+    return this.sessionToken;
   }
 
   // END: READ

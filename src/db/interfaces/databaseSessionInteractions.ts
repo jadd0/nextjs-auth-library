@@ -19,20 +19,19 @@ export const DatabaseSessionInteractions = {
 
   /** Used to retrieve a session by via session ID */
   async getSessionById(id: string): Promise<Session | null> {
-    return await db
-      .select()
-      .from(sessions)
-      .where(eq(sessions.id, id))
-      .findFirst();
+    const result = await db.select().from(sessions).where(eq(sessions.id, id));
+
+    return result[0] || null;
   },
 
   /** Used to retrieve the session related to a specific user via their user ID */
   async getSessionsByUserId(userId: string): Promise<Session | null> {
-    return await db
+    const result = await db
       .select()
       .from(sessions)
-      .where(eq(sessions.userId, userId))
-      .findFirst();
+      .where(eq(sessions.userId, userId));
+
+    return result[0] || null;
   },
 
   /** Used to retrieve all active sessions */

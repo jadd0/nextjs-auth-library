@@ -21,15 +21,16 @@ export const DatabasePoolConfigSchema = z.object({
   port: z.number(),
 });
 
+/** Options schema for options (duh) */
+const OptionsSchema = z.object({
+  strategy: z.enum(["jwt", "database"]).default("database"),
+  idleTTL: z.number().nullable().optional(),
+  absoluteTTL: z.number().nullable().optional(),
+});
+
 /** Full config schema */
 export const AuthConfigSchema = z.object({
-  options: [
-    z
-      .object({
-        strategy: z.enum(["jwt", "database"]),
-      })
-      .default({ strategy: "database" }),
-  ],
+  options: OptionsSchema.default({ strategy: "database" }),
 
   /** Either a database pool, or a database URL */
   db: z.union([z.string().url(), DatabasePoolConfigSchema]),
@@ -37,7 +38,5 @@ export const AuthConfigSchema = z.object({
   providers: z.array(z.any()).default([]), // TODO: refine this with proper type
   callbacks: CallbacksSchema,
 
-  // This gives the developer the option to how long they wish the sessions for datbabase persistant storage session to last for
-  idleTTL: z.number().nullable(),
-  absoluteTTL: z.number().nullable(), // TODO: make so if have one must have other 
+  sameSite: z.enum(["lax", "strict", "none"]).default("strict").nullable(),
 });
