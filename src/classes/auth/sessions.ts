@@ -5,6 +5,8 @@ import { DatabaseUserInteractions } from "@/db/interfaces/databaseUserInteractio
 import { generateSessionToken } from "@/utils/session/generateSessionToken";
 import { authConfig } from "@/core/singleton";
 
+// TODO: not fetching from db on init
+
 /**
  * @class Sessions
  * @description Represents a blueprint for an object encapsulating user sessions in the authentication system.

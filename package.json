@@ -9,6 +9,19 @@
     "dist/",
     "drizzle/"
   ],
+  "exports": {
+    ".": {
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./client": {
+      "import": "./dist/client.mjs",
+      "require": "./dist/client.js",
+      "types": "./dist/client.d.ts"
+    },
+    "./drizzle/*": "./drizzle/*"
+  },
   "peerDependencies": {
     "next": ">=13.4 || >=14 || >=15",
     "react": ">=18.2.0 || >=19",
@@ -22,7 +35,7 @@
     "typescript": "^5"
   },
   "scripts": {
-    "build": "tsup",
+    "build": "tsup src/index.ts src/client.ts --format cjs,esm --dts",
     "dev": "tsup --watch --dts"
   },
   "dependencies": {

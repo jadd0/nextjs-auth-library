@@ -1,14 +1,5 @@
-import { auth, authConfig, emailPasswordProvider } from "@/core/singleton";
-import { DatabaseSessionInteractions } from "@/db/interfaces/databaseSessionInteractions";
-import { DEFAULT_IDLE_TTL } from "@/shared/constants";
-import { generateSessionCookie } from "@/utils/session";
-
-export class ClientEmailPassword {
-  provider: typeof emailPasswordProvider;
-  constructor() {
-    this.provider = emailPasswordProvider;
-  }
-
+/** Object of methods for client-side email-password provider */
+export const ClientEmailPassword = {
   /** Use this to log a user in via Email and Password */
   async login(email: string, password: string) {
     // No email or password provided
@@ -24,17 +15,18 @@ export class ClientEmailPassword {
       );
     }
 
-    // Ensure email-password provider is enabled in the auth configuration
-    if (!authConfig.providers.includes("emailPassword")) {
-      throw new Error(
-        "Email-Password provider is not enabled in the auth configuration"
-      );
-    }
+    // TODO: find a better way to handle this as cannot import authConfig directly due to server/client separation
+    // // Ensure email-password provider is enabled in the auth configuration
+    // if (!authConfig.providers.includes("emailPassword")) {
+    //   throw new Error(
+    //     "Email-Password provider is not enabled in the auth configuration"
+    //   );
+    // }
 
-    // Ensure auth module is initialised
-    if (!auth) {
-      throw new Error("Auth module is not initialised");
-    }
+    // // Ensure auth module is initialised
+    // if (!auth) {
+    //   throw new Error("Auth module is not initialised");
+    // }
 
     // Request to backend to log the user in via the backend auth class (more secure)
     const res = await fetch("/api/auth/provider/emailPassword/login", {
@@ -55,5 +47,5 @@ export class ClientEmailPassword {
     // TODO: append to client-side session store and context
 
     return data;
-  }
-}
+  },
+};
